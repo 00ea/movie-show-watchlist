@@ -1,0 +1,26 @@
+<%- contentFor('body') %>
+
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card bg-success bg-opacity-75 p-5 shadow-lg" style="max-width: 34rem; border-radius: 2rem;">
+    <div class="card-body d-flex flex-column align-items-center">
+
+      <!-- Success Icon and Message -->
+      <div class="mb-4">
+        <i class="fa-solid fa-circle-check" style="font-size: 4rem; color: #fff;"></i>
+      </div>
+      <h2 class="card-title mb-3 text-center text-white">
+        X Added!
+      </h2>
+      <p class="text-white text-center mb-4" style="font-size: 1.2rem;">
+        Your X has been successfully added to your Watchlist!<br><br>
+        You can now (), (), or () your X with ease.
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="d-flex gap-3 mt-3">
+        <a href="/catalog" class="btn btn-light btn-lg px-4">View Catalog</a>
+        <a href="/additem" class="btn btn-outline-light btn-lg px-4">Add Another X</a>
+      </div>
+    </div>
+  </div>
+</div>
