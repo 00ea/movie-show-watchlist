@@ -42,7 +42,7 @@ router.post('/additem', async (req, res, next) => {
     var newItem = new Item(itemData);
     await newItem.save();
 
-    res.redirect('/itemadded');
+    res.redirect(`/itemadded?type=${req.body.type}&title=${encodeURIComponent(req.body.title)}`);
 
   } catch (error) {
     console.error('Error adding item:', error);
@@ -52,6 +52,17 @@ router.post('/additem', async (req, res, next) => {
       formData: req.body
     });
   }
+});
+
+router.get('/itemadded', function(req, res, next) {
+  var type = req.query.type || 'item';
+  var itemTitle = req.query.title || 'item';
+
+  res.render('itemadded', {
+    title: 'Success!',
+    itemType: type,
+    itemTitle: itemTitle
+  });
 });
 
 /* GET catalog page. */
@@ -92,6 +103,7 @@ router.get('/catalog', async (req, res, next) => {
       currentFilter: req.query,
       errors: null
     });
+    
   } catch (error) {
     console.error('Error fetching catalog:', error);
     res.render('catalog', {
@@ -102,11 +114,6 @@ router.get('/catalog', async (req, res, next) => {
       errors: 'Failed to load catalog'
     });
   }
-});
-
-/* GET itemadded success page */
-router.get('/itemadded', function(req, res) {
-  res.render('itemadded', { title: 'Success!' });
 });
 
 module.exports = router;

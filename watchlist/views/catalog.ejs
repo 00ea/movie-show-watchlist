@@ -1,26 +1,63 @@
-  <%- contentFor('body') %>
-  
-  <div class="container">
+<%- contentFor('body') %>
+
+<div class="container">
   <div class="text-center mt-4 mb-5">
     <h1 class="card-title mb-0">Catalog</h1>
     <h5 class="card-text mb-4">View all your Movies and Shows here!</h5>
- </div>
+  </div>
 
   <div class="table-responsive">
     <table class="table table-bordered table-hover">
       <thead class="thead-dark">
         <tr>
+          <th scope="col">Type</th>
           <th scope="col">Title</th>
           <th scope="col">Director</th>
+          <th scope="col">Year</th>
           <th scope="col">Status</th>
-          <th scope="col">Action</th>
+          <th scope="col">Actions</th>
         </tr>
       </thead>
-      <body>
-        <p>placeholder</p>
-      </body>
+      <tbody>
+        <% if (items && items.length > 0) { %>
+          <% items.forEach(item => { %>
+            <tr>
+              <td>
+                <span class="badge <%= item.type === 'movie' ? 'bg-primary' : 'bg-info' %>">
+                  <%= item.type === 'movie' ? 'Movie' : 'Show' %>
+                </span>
+              </td>
+              <td><strong><%= item.title %></strong></td>
+              <td><%= item.director || 'N/A' %></td>
+              <td><%= item.releaseYear %></td>
+              <td>
+                <% 
+                  let statusClass = 'secondary';
+                  if (item.status === 'Completed') statusClass = 'success';
+                  else if (item.status === 'In Progress') statusClass = 'warning';
+                %>
+                <span class="badge bg-<%= statusClass %>"><%= item.status %></span>
+              </td>
+              <td>
+                <a href="/item/<%= item._id %>/edit" class="btn btn-sm btn-primary">Edit</a>
+                <form action="/item/<%= item._id %>/delete" method="POST" style="display: inline;" 
+                      onsubmit="return confirm('Delete?');">
+                  <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }); %>
+        <% } else { %>
+          <tr>
+            <td colspan="6" class="text-center py-4">
+              <p>No items yet. <a href="/additem">Add your first item!</a></p>
+            </td>
+          </tr>
+        <% } %>
+      </tbody>
     </table>
   </div>
+
   <div class="text-right mb-3">
     <a href="/additem" class="btn btn-primary">Add Movie/Show</a>
   </div>

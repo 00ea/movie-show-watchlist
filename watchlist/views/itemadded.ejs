@@ -9,17 +9,21 @@
         <i class="fa-solid fa-circle-check" style="font-size: 4rem; color: #fff;"></i>
       </div>
       <h2 class="card-title mb-3 text-center text-white">
-        X Added!
+        <%= itemType === 'movie' ? 'Movie' : 'TV Show' %> Added!
       </h2>
       <p class="text-white text-center mb-4" style="font-size: 1.2rem;">
-        Your X has been successfully added to your Watchlist!<br><br>
-        You can now (), (), or () your X with ease.
+        <strong><%= itemTitle %></strong> has been successfully added to your Watchlist!<br><br>
+        You can now view, edit, or manage your <%= itemType === 'movie' ? 'movie' : 'show' %> with ease.
       </p>
 
       <!-- Action Buttons -->
       <div class="d-flex gap-3 mt-3">
-        <a href="/catalog" class="btn btn-light btn-lg px-4">View Catalog</a>
-        <a href="/additem" class="btn btn-outline-light btn-lg px-4">Add Another X</a>
+        <a href="/catalog" class="btn btn-light btn-lg px-4">
+          <i class="fa-solid fa-list me-2"></i>View Catalog
+        </a>
+        <a href="/additem" class="btn btn-outline-light btn-lg px-4">
+          <i class="fa-solid fa-plus me-2"></i>Add Another <%= itemType === 'movie' ? 'Movie' : 'Show' %>
+        </a>
       </div>
     </div>
   </div>
