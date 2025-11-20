@@ -124,4 +124,28 @@ router.get('/catalog', async (req, res, next) => {
   }
 });
 
+router.post('/item/:id/delete', async (req, res, next) => {
+  try {
+    var itemId = req.params.id;
+
+    var deletedItem = await Item.findByIdAndDelete(itemId);
+
+    if (!deletedItem) {
+      return res.status(404).render('error', {
+        message: 'Item not found',
+        error: {status: 404}
+      });
+    }
+
+    res.redirect('/catalog');
+
+  } catch (error) {
+    console.error('Error deleting item:', error);
+    res.status(500).render('error', {
+      title: 'Error',
+      message: 'Failed to delete item',
+      error: error 
+    });
+  }
+});
 module.exports = router;
