@@ -6,6 +6,83 @@
     <h5 class="card-text mb-4">View all your Movies and Shows here!</h5>
   </div>
 
+ <!-- Search & Filter Bar -->
+  <div class="card bg-secondary p-3 mb-4">
+    <form method="GET" action="/catalog">
+      <div class="row g-3 align-items-end">
+        
+        <!-- Search Bar -->
+        <div class="col-md-4">
+          <label for="searchInput" class="form-label">
+            <i class="fa-solid fa-search me-1"></i>Search by Title
+          </label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="searchInput" 
+            name="search" 
+            placeholder="Search movies & shows..."
+            value="<%= currentFilter.search || '' %>"
+          >
+        </div>
+
+        <!-- Filter by Type -->
+        <div class="col-md-2">
+          <label for="typeFilter" class="form-label">Type</label>
+          <select name="type" id="typeFilter" class="form-control">
+            <option value="">All Types</option>
+            <option value="movie" <%= currentFilter.type === 'movie' ? 'selected' : '' %>>Movies</option>
+            <option value="show" <%= currentFilter.type === 'show' ? 'selected' : '' %>>TV Shows</option>
+          </select>
+        </div>
+
+        <!-- Filter by Status -->
+        <div class="col-md-2">
+          <label for="statusFilter" class="form-label">Status</label>
+          <select name="status" id="statusFilter" class="form-control">
+            <option value="">All Statuses</option>
+            <option value="Not Started" <%= currentFilter.status === 'Not Started' ? 'selected' : '' %>>Not Started</option>
+            <option value="In Progress" <%= currentFilter.status === 'In Progress' ? 'selected' : '' %>>In Progress</option>
+            <option value="Completed" <%= currentFilter.status === 'Completed' ? 'selected' : '' %>>Completed</option>
+          </select>
+        </div>
+
+        <!-- Sort By -->
+        <div class="col-md-2">
+          <label for="sortFilter" class="form-label">Sort By</label>
+          <select name="sort" id="sortFilter" class="form-control">
+            <option value="dateAdded" <%= currentFilter.sort === 'dateAdded' || !currentFilter.sort ? 'selected' : '' %>>Date Added</option>
+            <option value="title" <%= currentFilter.sort === 'title' ? 'selected' : '' %>>Title</option>
+            <option value="releaseYear" <%= currentFilter.sort === 'releaseYear' ? 'selected' : '' %>>Year</option>
+            <option value="imdbRating" <%= currentFilter.sort === 'imdbRating' ? 'selected' : '' %>>Rating</option>
+          </select>
+        </div>
+
+        <!-- Buttons -->
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-primary w-100 mb-2">
+            Apply<i class="fa-solid fa-filter me-1"></i>
+          </button>
+          <a href="/catalog" class="btn btn-outline-dark w-100">
+            Clear<i class="fa-solid fa-rotate-right me-1"></i>
+          </a>
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+  <!-- Results Count -->
+  <div class="mb-3">
+    <p class="text-muted">
+      Showing <strong><%= items.length %></strong> 
+      <% if (currentFilter.search || currentFilter.type || currentFilter.status) { %>
+        of <strong><%= stats.total %></strong>
+      <% } %>
+      item(s)
+    </p>
+  </div>
+
   <div class="table-responsive">
     <table class="table table-bordered table-hover">
       <thead class="thead-dark">

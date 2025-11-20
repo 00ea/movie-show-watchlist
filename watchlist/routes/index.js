@@ -54,6 +54,7 @@ router.post('/additem', async (req, res, next) => {
   }
 });
 
+/* GET itemadded success page */
 router.get('/itemadded', function(req, res, next) {
   var type = req.query.type || 'item';
   var itemTitle = req.query.title || 'item';
@@ -68,26 +69,33 @@ router.get('/itemadded', function(req, res, next) {
 /* GET catalog page. */
 router.get('/catalog', async (req, res, next) => {
   try {
-    const filter = {};
+    var filter = {};
     
+    // Filter by type (movie or show)
     if (req.query.type) {
       filter.type = req.query.type;
     }
     
+    // Filter by status
     if (req.query.status) {
       filter.status = req.query.status;
     }
 
+    // Search by title (case-insensitive)
+    if (req.query.search) {
+      filter.title = { $regex: req.query.search, $options: 'i' };
+    }
+
     // Get sort parameter (default: newest first)
-    const sortBy = req.query.sort || 'dateAdded';
-    const sortOrder = req.query.order === 'asc' ? 1 : -1;
-    const sort = { [sortBy]: sortOrder };
+    var sortBy = req.query.sort || 'dateAdded';
+    var sortOrder = req.query.order === 'asc' ? 1 : -1;
+    var sort = { [sortBy]: sortOrder };
 
     // Fetch items from database
-    const items = await Item.find(filter).sort(sort);
+    var items = await Item.find(filter).sort(sort);
 
     // Count items by type and status for stats
-    const stats = {
+    var stats = {
       total: await Item.countDocuments(),
       movies: await Item.countDocuments({ type: 'movie' }),
       shows: await Item.countDocuments({ type: 'show' }),
