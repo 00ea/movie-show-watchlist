@@ -1,0 +1,233 @@
+<%- contentFor('body') %>
+
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card bg-secondary p-4" style="max-width: 52rem; width: 100%;">
+    <div class="card-body d-flex flex-column align-items-center p-4">
+
+      <!-- Title (Dynamic) -->
+      <h1 class="card-title py-3" style="text-align: center; font-size: 2.25rem;" id="pageTitle">
+        Edit <%= item.type === 'movie' ? 'Movie' : 'TV Show' %> <i class="fa-solid <%= item.type === 'movie' ? 'fa-film' : 'fa-tv' %>"></i>
+      </h1>
+
+      <form action="/item/<%= item._id %>/edit" method="POST" id="editItemForm" style="width: 100%;">
+      
+         <!-- Type Selection -->
+            <div class="row mb-3 justify-content-center">
+              <div class="col-md-6">
+              <label for="type" class="form-label text-center d-block">Type <span class="text-danger">*</span></label>
+              <select class="form-control" id="type" name="type" required>
+                <option value="">-- Select Type --</option>
+                <option value="movie" <%= item.type === 'movie' ? 'selected' : '' %>>Movie</option>
+                <option value="show" <%= item.type === 'show' ? 'selected' : '' %>>TV Show</option>
+              </select>
+            </div>
+            </div>
+            
+            <!-- Title -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+              <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="title" 
+                name="title" 
+                placeholder="Enter title"
+                required
+                value="<%= item.title %>">
+            </div>
+
+           <!-- Director -->
+            <div class="col-md-6">
+              <label for="director" class="form-label">Director/Creator</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="director" 
+                name="director" 
+                placeholder="Enter director or creator name"
+                value="<%= item.director || '' %>"
+              >
+            </div>
+            </div>
+
+            <!-- Duration -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+              <label for="duration" class="form-label">Duration</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="duration" 
+                name="duration" 
+                placeholder="e.g., 2h 30m or 45 min/episode"
+                value="<%= item.duration || '' %>"
+              >
+            </div>
+
+             <!-- Genre -->
+            <div class="col-md-6">
+              <label for="genre" class="form-label">Genre(s) <span class="text-danger">*</span></label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="genre" 
+                name="genre" 
+                placeholder="Action, Drama, Sci-Fi (comma-separated)"
+                required
+                value="<%= item.genre.join(', ') %>"
+              >
+              <small class="form-text text-muted">Separate multiple genres with commas</small>
+            </div>
+            </div>
+
+            <!-- imdb Ratings -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="imdbRating" class="form-label">IMDb Rating</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  id="imdbRating" 
+                  name="imdbRating" 
+                  min="0" 
+                  max="10" 
+                  step="0.1"
+                  placeholder="0.0 - 10.0"
+                  value="<%= item.imdbRating || '' %>"
+                >
+              </div>
+              
+               <!-- Release Year -->
+            <div class="col-md-6">
+              <label for="releaseYear" class="form-label">Release Year <span class="text-danger">*</span></label>
+              <input 
+                type="number" 
+                class="form-control" 
+                id="releaseYear" 
+                name="releaseYear" 
+                min="1888" 
+                max="<%= new Date().getFullYear() + 5 %>"
+                placeholder="<%= new Date().getFullYear() %>"
+                required
+                value="<%= item.releaseYear %>"
+              >
+            </div>
+            </div>
+
+            <!-- Status -->
+            <div class="row mb-3 justify-content-center">
+              <div class="col-md-6">
+              <label for="status" class="form-label text-center d-block">Status</label>
+              <select class="form-control" id="status" name="status">
+                <option value="Not Started" <%= item.status === 'Not Started' ? 'selected' : '' %>>Not Started</option>
+                <option value="In Progress" <%= item.status === 'In Progress' ? 'selected' : '' %>>In Progress</option>
+                <option value="Completed" <%= item.status === 'Completed' ? 'selected' : '' %>>Completed</option>
+              </select>
+            </div>
+            </div>
+
+            <!-- Show-Specific Fields -->
+            <div id="showFields" style="display: <%= item.type === 'show' ? 'block' : 'none' %>;">
+              <hr class="my-4">
+              <h5 class="mb-3">TV Show Details</h5>
+              
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="totalSeasons" class="form-label">Total Seasons</label>
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    id="totalSeasons" 
+                    name="totalSeasons" 
+                    min="1"
+                    placeholder="e.g., 5"
+                    value="<%= item.totalSeasons || '' %>"
+                  >
+                </div>
+                <div class="col-md-6">
+                  <label for="totalEpisodes" class="form-label">Total Episodes</label>
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    id="totalEpisodes" 
+                    name="totalEpisodes" 
+                    min="1"
+                    placeholder="e.g., 60"
+                    value="<%= item.totalEpisodes || '' %>"
+                  >
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="currentSeason" class="form-label">Current Season</label>
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    id="currentSeason" 
+                    name="currentSeason" 
+                    min="1"
+                    placeholder="1"
+                    value="<%= item.currentSeason || '' %>"
+                  >
+                </div>
+                <div class="col-md-6">
+                  <label for="currentEpisode" class="form-label">Current Episode</label>
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    id="currentEpisode" 
+                    name="currentEpisode" 
+                    min="0"
+                    placeholder="0"
+                    value="<%= item.currentEpisode || '' %>"
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit Buttons -->
+            <div class="d-flex gap-3 mt-4 justify-content-center">
+              <a href="/catalog" class="btn btn-danger btn-lg">
+                Cancel
+                <i class="fas fa-times ms-2"></i>
+              </a>
+              <button type="submit" class="btn btn-success btn-lg">
+                Save Changes
+                <i class="fa-solid fa-check ms-2"></i>
+              </button>
+            </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  // Show/hide TV show fields based on type selection
+  document.getElementById('type').addEventListener('change', function() {
+    const showFields = document.getElementById('showFields');
+    const showInputs = showFields.querySelectorAll('input');
+    const pageTitle = document.getElementById('pageTitle');
+    
+    if (this.value === 'show') {
+      pageTitle.innerHTML = 'Edit TV Show <i class="fa-solid fa-tv"></i>';
+      showFields.style.display = 'block';
+
+      showInputs.forEach(input => {
+        if (input.id === 'totalSeasons' || input.id === 'totalEpisodes') {
+          input.setAttribute('required', 'required');
+        }
+      });
+    } else if (this.value === 'movie') {
+      pageTitle.innerHTML = 'Edit Movie <i class="fa-solid fa-film"></i>';
+      showFields.style.display = 'none';
+
+      showInputs.forEach(input => {
+        input.removeAttribute('required');
+      });
+    }
+  });
+</script>

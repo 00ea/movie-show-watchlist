@@ -148,4 +148,88 @@ router.post('/item/:id/delete', async (req, res, next) => {
     });
   }
 });
+
+router.get('/item/:id/edit', async (req, res, next) => {
+  try {
+    var itemId = req.params.id;
+    var item = await Item.findById(itemId);
+
+    if (!item) {
+      return res.status(404).render('error', {
+        title: 'Error',
+        message: 'Item not found',
+        error: {status: 404}
+      });
+    }
+
+    res.render('edititem', {
+      title: 'Edit Item',
+      item: item,
+      errors: null
+    });
+
+  } catch (error) {
+    console.error('Error fetching item for edit:', error);
+    res.status(500).render('error', {
+      title: 'Error',
+      message: 'Failed to load item for editing',
+      error: error 
+    });
+  }
+});
+
+router.post('/item/:id/edit', async (req, res, next) => {
+  try {
+    var itemId = req.params.id;
+
+    var updatedData = {
+      type: req.body.type,
+      title: req.body.title, 
+      genre: req.body.genre.split(',').map(g => g.trim()),
+      releaseYear: req.body.releaseYear,
+      director: req.body.director,
+      duration: req.body.duration,
+      imdbRating: req.body.imdbRating || undefined,
+      personalRating: req.body.personalRating || undefined,
+      status: req.body.status || 'Not Started'
+    };
+
+    if (req.body.type === 'show') {
+      updatedData.totalSeasons = req.body.totalSeasons;
+      updatedData.totalEpisodes = req.body.totalEpisodes;
+      updatedData.currentSeason = req.body.currentSeason;
+      updatedData.currentEpisode = req.body.currentEpisode;
+    } else {
+      updatedData.totalSeasons = undefined;
+      updatedData.totalEpisodes = undefined;
+      updatedData.currentSeason = undefined;
+      updatedData.currentEpisode = undefined;
+    }
+
+    var updatedItem = await Item.findByIdAndUpdate(itemId, updatedData, {
+       new: true, 
+       runValidators: true 
+      });
+
+    if (!updatedItem) {
+      return res.status(404).render('error', {
+        title: 'Error',
+        message: 'Item not found',
+        error: {status: 404}
+      });
+    }
+
+    res.redirect('/catalog');
+
+  } catch (error) {
+    console.error('Error updating item:', error);
+    var item = await Item.findById(req.params.id);
+    res.render('edititem', {
+      title: 'Edit Item',
+      item: item,
+      errors: error.errors || { message: 'Failed to update item' }
+    });
+  }
+}); 
+
 module.exports = router;
