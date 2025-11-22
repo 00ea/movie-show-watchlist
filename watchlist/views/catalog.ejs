@@ -1,13 +1,13 @@
 <%- contentFor('body') %>
 
 <div class="container">
-  <div class="text-center mt-4 mb-5">
+  <div class="text-center mt-4 mb-5" style="animation: fadeInDown 0.8s ease-out;">
     <h1 class="card-title mb-0">Catalog</h1>
     <h5 class="card-text mb-4">View all your Movies and Shows here!</h5>
   </div>
 
  <!-- Search & Filter Bar -->
-  <div class="card bg-secondary p-3 mb-4">
+  <div class="card bg-secondary p-3 mb-4" style="animation: fadeInDown 0.8s ease-out;">
     <form method="GET" action="/catalog">
       <div class="row g-3 align-items-end">
         
@@ -72,7 +72,7 @@
   </div>
 
   <!-- Results Count -->
-  <div class="mb-3">
+  <div class="mb-3" style="animation: fadeInUp 1s ease-out;">
     <p class="text-muted">
       Showing <strong><%= items.length %></strong> 
       <% if (currentFilter.search || currentFilter.type || currentFilter.status) { %>
@@ -82,7 +82,7 @@
     </p>
   </div>
 
-  <div class="table-responsive">
+  <div class="table-responsive" style="animation: fadeInUp 1s ease-out;">
     <table class="table table-bordered table-hover">
       <thead class="thead-dark">
         <tr>
@@ -134,7 +134,7 @@
     </table>
   </div>
 
-  <div class="text-right mb-3">
+  <div class="text-right mb-3" style="animation: fadeInUp 1s ease-out;">
     <a href="/additem" class="btn btn-primary">Add Movie/Show</a>
   </div>
 </div>
